@@ -50,7 +50,7 @@ class HabitItem extends StatelessWidget {
             ),
             // Visual feedback icon
             Icon(
-              completed ? Icons.check_box_outline_blank_rounded : Icons.check_box_rounded,
+              completed ?  Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
               color: completed ? Colors.green : Colors.grey,
             ),
           ],

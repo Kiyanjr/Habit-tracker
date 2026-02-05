@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/habit/provider/habit_provider.dart';
+import 'package:habit_tracker/habit/screens/all_habits_screen.dart';
 import 'package:habit_tracker/habit/widgets/habit_items.dart';
 import 'package:habit_tracker/theme/colors.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,13 @@ class TodaysHabitSection extends StatelessWidget {
               Spacer(),
               // BUTTON
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AllHabitsScreen()),
+                  );
+                },
+
                 child: Text(
                   'See all',
                   style: TextStyle(
@@ -54,8 +61,9 @@ class TodaysHabitSection extends StatelessWidget {
               context,
               listen: false,
             ).habits.length,
-            shrinkWrap: true,//<---- list expands as muvh as it self
-            physics: const NeverScrollableScrollPhysics(),  //<---- it helps scrolling in main page dont face a challaneg
+            shrinkWrap: true, //<---- list expands as muvh as it self
+            physics:
+                const NeverScrollableScrollPhysics(), //<---- it helps scrolling in main page dont face a challaneg
             itemBuilder: (context, index) {
               final habit = Provider.of<HabitProvider>(context).habits[index];
               return HabitItem(

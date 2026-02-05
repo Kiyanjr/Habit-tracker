@@ -16,6 +16,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => HabitProvider()),
+        ChangeNotifierProvider.value(value: habitProvider),
       ],
       child: MyApp(),
     ),

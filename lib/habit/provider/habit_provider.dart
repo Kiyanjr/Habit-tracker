@@ -32,14 +32,14 @@ class HabitProvider extends ChangeNotifier {
 
     String? habitsJson = prefs.getString('saved_habits');
     String? goalsJson = prefs.getString('saved_goals');
-    if(habitsJson!=null){
-    Iterable decoded=jsonDecode(habitsJson);
-    _habits=decoded.map((h)=>HabitModel.fromMap(h)).toList();
+    if (habitsJson != null) {
+      Iterable decoded = jsonDecode(habitsJson);
+      _habits = decoded.map((h) => HabitModel.fromMap(h)).toList();
     }
     print("Loaded habits: ${_habits.length}");
-    if(goalsJson!=null){
-      Iterable decoded=jsonDecode(goalsJson);
-      _goals=decoded.map((h)=>HabitModel.fromMap(h)).toList();
+    if (goalsJson != null) {
+      Iterable decoded = jsonDecode(goalsJson);
+      _goals = decoded.map((h) => HabitModel.fromMap(h)).toList();
     }
     notifyListeners();
   }
@@ -48,14 +48,26 @@ class HabitProvider extends ChangeNotifier {
 
   void addHabit(HabitModel newHabit) {
     _habits.add(newHabit);
-    _saveToPrefs();//<---- save after adding 
+    _saveToPrefs(); //<---- save after adding
     notifyListeners();
   }
 
   void toggleHabitStatus(int index) {
-    _habits[index] = _habits[index].copyWith(
-      isCompleted: !_habits[index].isCompleted,
+    final habit = _habits[index];
+    final bool newStatus = !habit.isCompleted;
+
+    // updating status situation in habits list
+    _habits[index] = habit.copyWith(isCompleted: newStatus);
+
+    // updating goallist situation
+    final int goalIndex = _goals.indexWhere(
+      (g) => g.goalTitle == habit.goalTitle,
     );
+
+    if (goalIndex != -1) {
+      _goals[goalIndex] = _goals[goalIndex].copyWith(isCompleted: newStatus);
+    }
+
     _saveToPrefs(); // Save after changing status
     notifyListeners();
   }
@@ -67,7 +79,6 @@ class HabitProvider extends ChangeNotifier {
     if (totalHabits == 0) return 0;
     return completedHabits / totalHabits;
   }
-  
 
   void addGoal(HabitModel newGoal) {
     _goals.add(newGoal);
@@ -102,7 +113,7 @@ class HabitProvider extends ChangeNotifier {
   // 3. Optional: Helper to get progress text (e.g., "1 from 7 days target")
   String getGoalStatusText(HabitModel goalItem) {
     int total = _getTotalDaysFromPeriod(goalItem.period);
-    int current = goalItem.isCompleted ? 1 : 0 ;
+    int current = goalItem.isCompleted ? 1 : 0;
     return "$current from $total days target";
   }
 }
