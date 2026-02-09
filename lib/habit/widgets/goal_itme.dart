@@ -1,7 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/habit/models/habit_model.dart';
+import 'package:habit_tracker/habit/provider/habit_provider.dart';
+import 'package:habit_tracker/habit/widgets/delete_action_dialog.dart';
+import 'package:habit_tracker/habit/widgets/goal_delete_action_dialog.dart';
 import 'package:habit_tracker/theme/colors.dart';
+import 'package:provider/provider.dart';
 
 
 class GoalItem extends StatelessWidget {
@@ -45,7 +49,12 @@ class GoalItem extends StatelessWidget {
                 habit.goalTitle, // Using goal from model
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
-              const Icon(Icons.more_vert, color: Colors.grey, size: 20),
+             TextButton(
+              onPressed: (){
+                _showActionMenu(context, habit);
+              }, 
+              child:Icon(Icons.more_vert),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -81,5 +90,56 @@ class GoalItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  // -----Action menu for  three dot icons for our Buttons
+ void _showActionMenu(BuildContext context,HabitModel habit){
+  showModalBottomSheet(
+    context:context,
+    shape: BeveledRectangleBorder(borderRadius:BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (context) {
+      return Container(
+      padding:const  EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          //---------------------EDIT-------------
+          ListTile(
+            leading: const Icon(Icons.edit,color: AppColors.accentText),
+            title: const Text('Edit'),
+            onTap: (){
+
+              /// EDIT FUNCTION
+            },
+            ),
+          const Divider(),
+
+          //------------Delete----------------
+          ListTile(
+           leading: const Icon(Icons.delete,color: AppColors.accentText),
+           title: const Text("Delete"),
+           onTap: () {
+               showDeleteConfirmation(context, habit);
+           },
+          ),
+        ],
+      ),
+      );
+    },
+    );
+  }
+  void showDeleteConfirmation(BuildContext context,HabitModel habit){
+    final provider=Provider.of<HabitProvider>(context,listen:false);
+    showDialog(
+      context: context,
+     builder:(context)=>GoalDeleteActionDialog(
+      goalTitle:habit.goalTitle,
+     onDeleteConfirmed: (){
+      provider.deleteHabit(habit);
+     },
+      ),
+     );
+
   }
 }
