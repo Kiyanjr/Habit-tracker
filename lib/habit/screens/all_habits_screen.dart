@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/habit/models/date.model.dart';
+import 'package:habit_tracker/habit/models/habit_model.dart';
 import 'package:habit_tracker/habit/provider/habit_provider.dart';
+import 'package:habit_tracker/habit/widgets/delete_action_dialog.dart';
 import 'package:habit_tracker/theme/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +17,7 @@ class AllHabitsScreen extends StatefulWidget {
 }
 
 class _AllHabitsScreenState extends State<AllHabitsScreen> {
+  DateTime _selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,8 +71,8 @@ class _AllHabitsScreenState extends State<AllHabitsScreen> {
                           habit.title,
                           style: TextStyle(
                             color: habit.isCompleted
-                              ? const Color(0xFF2E7D32) 
-                              : Colors.black87,
+                                ? const Color(0xFF2E7D32)
+                                : Colors.black87,
                             decoration: habit.isCompleted
                                 ? TextDecoration.lineThrough
                                 : null,
@@ -79,8 +82,8 @@ class _AllHabitsScreenState extends State<AllHabitsScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: (){
-                              provider.toggleHabitStatus(index);
+                              onPressed: () {
+                                provider.toggleHabitStatus(index);
                               },
                               icon: Icon(
                                 habit.isCompleted
@@ -91,11 +94,12 @@ class _AllHabitsScreenState extends State<AllHabitsScreen> {
                                     : Colors.grey,
                               ),
                             ),
-                            //  3 dots icon for edit or delete
+
+                            // --------------- 3 dots icon for edit or delete----------
                             IconButton(
                               icon: const Icon(Icons.more_vert),
                               onPressed: () {
-                                // اینجا منوی حذف و ادیت را باز می‌کنیم
+                                _showActionMenu(context, habit);
                               },
                             ),
                           ],
@@ -177,6 +181,58 @@ class _AllHabitsScreenState extends State<AllHabitsScreen> {
               ),
             ),
           );
+        },
+      ),
+    );
+  }
+
+  void _showActionMenu(BuildContext context, HabitModel habit) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.edit, color: AppColors.accentText),
+                title: const Text('Edit'),
+                onTap: () {
+
+                  // move to  edit habit page
+                  
+                },
+              ),
+              // horizontal line
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.delete, color: AppColors.accentText),
+                title: const Text('Delete'),
+                onTap: () {
+                  Navigator.pop(context);
+                  showDeleteConfirmation(context, habit);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showDeleteConfirmation(BuildContext context, HabitModel habit) {
+    final provider = Provider.of<HabitProvider>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (context) => DeleteActionDialog(
+        //<----caliind deleteActionDialog widget
+        habitTitle: habit.title,
+        onDeleteConfirmed: () {
+          provider.deleteHabit(habit);
         },
       ),
     );

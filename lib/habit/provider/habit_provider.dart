@@ -110,10 +110,18 @@ class HabitProvider extends ChangeNotifier {
     return (current / total).clamp(0.0, 1.0);
   }
 
-  // 3. Optional: Helper to get progress text (e.g., "1 from 7 days target")
+  //  Optional: Helper to get progress text (e.g., "1 from 7 days target")
   String getGoalStatusText(HabitModel goalItem) {
     int total = _getTotalDaysFromPeriod(goalItem.period);
     int current = goalItem.isCompleted ? 1 : 0;
     return "$current from $total days target";
+  }
+
+  //     DELETE METHOD FOR DELETEING HABITS
+  void deleteHabit(HabitModel deleteHabit){
+    _habits.removeWhere((habit)=>habit.title==deleteHabit.title);
+    _goals.removeWhere((goal) =>goal.goalTitle==deleteHabit.goalTitle);
+    _saveToPrefs();
+    notifyListeners();
   }
 }
