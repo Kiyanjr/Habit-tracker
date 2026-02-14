@@ -3,20 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/habit/models/date.model.dart';
 import 'package:habit_tracker/habit/models/habit_model.dart';
 import 'package:habit_tracker/habit/provider/habit_provider.dart';
-import 'package:habit_tracker/habit/widgets/delete_action_dialog.dart';
+import 'package:habit_tracker/habit/widgets/delete-functions/delete_action_dialog.dart';
+import 'package:habit_tracker/habit/widgets/edit-functions/habit_edit_dialog.dart';
 import 'package:habit_tracker/theme/colors.dart';
 import 'package:provider/provider.dart';
 
-class AllHabitsScreen extends StatefulWidget {
-  const AllHabitsScreen({super.key});
+class SeeAllHabitsScreen extends StatefulWidget {
+  const SeeAllHabitsScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _AllHabitsScreenState();
+    return _SeeAllHabitsScreen();
   }
 }
 
-class _AllHabitsScreenState extends State<AllHabitsScreen> {
+class _SeeAllHabitsScreen extends State<SeeAllHabitsScreen> {
   DateTime _selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
@@ -202,10 +203,11 @@ class _AllHabitsScreenState extends State<AllHabitsScreen> {
                 leading: const Icon(Icons.edit, color: AppColors.accentText),
                 title: const Text('Edit'),
                 onTap: () {
-
-                  // move to  edit habit page
-                  
-                },
+                  //-----------------Editing Habits--------------
+                  showDialog(context: context,
+                   builder:(context) => HabitEditDialog(habit: habit),
+                   );
+                 },
               ),
               // horizontal line
               const Divider(),

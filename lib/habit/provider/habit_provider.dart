@@ -117,11 +117,34 @@ class HabitProvider extends ChangeNotifier {
     return "$current from $total days target";
   }
 
-  //     DELETE METHOD FOR DELETEING HABITS
-  void deleteHabit(HabitModel deleteHabit){
-    _habits.removeWhere((habit)=>habit.title==deleteHabit.title);
-    _goals.removeWhere((goal) =>goal.goalTitle==deleteHabit.goalTitle);
+  // -----DELETE METHOD FOR DELETEING HABITS------
+  void deleteHabit(HabitModel deleteHabit) {
+    _habits.removeWhere((habit) => habit.title == deleteHabit.title);
+    _goals.removeWhere((goal) => goal.goalTitle == deleteHabit.goalTitle);
     _saveToPrefs();
     notifyListeners();
+  }
+
+             // ------Editing Habits&Goals-------
+  void updateHabitGoal(HabitModel updatedHabit, String oldHabitTitle) {
+    //--------------- Finding Loacation--------
+    final habitIndex = _habits.indexWhere((h) => h.title == oldHabitTitle);
+
+    if (habitIndex != -1) {
+      ///---------- before Editing we pick up date old goal-----
+      String oldGoalTitle = _habits[habitIndex].goalTitle;
+
+      //---Goal location---
+      final goalIndex = _goals.indexWhere((g) => g.goalTitle == oldGoalTitle);
+
+      _habits[habitIndex] = updatedHabit;
+
+      if (goalIndex != -1) {
+        _goals[goalIndex] = updatedHabit;
+      }
+
+      _saveToPrefs();
+      notifyListeners();
+    }
   }
 }

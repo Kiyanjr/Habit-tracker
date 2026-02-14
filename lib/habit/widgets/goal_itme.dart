@@ -1,12 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/habit/models/habit_model.dart';
 import 'package:habit_tracker/habit/provider/habit_provider.dart';
-import 'package:habit_tracker/habit/widgets/delete_action_dialog.dart';
-import 'package:habit_tracker/habit/widgets/goal_delete_action_dialog.dart';
+import 'package:habit_tracker/habit/widgets/delete-functions/delete_action_dialog.dart';
+import 'package:habit_tracker/habit/widgets/delete-functions/goal_delete_action_dialog.dart';
+import 'package:habit_tracker/habit/widgets/edit-functions/habit_edit_dialog.dart';
 import 'package:habit_tracker/theme/colors.dart';
 import 'package:provider/provider.dart';
-
 
 class GoalItem extends StatelessWidget {
   /// We now require the full HabitModel and the calculated progress
@@ -47,18 +46,21 @@ class GoalItem extends StatelessWidget {
             children: [
               Text(
                 habit.goalTitle, // Using goal from model
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
-             TextButton(
-              onPressed: (){
-                _showActionMenu(context, habit);
-              }, 
-              child:Icon(Icons.more_vert),
+              TextButton(
+                onPressed: () {
+                  _showActionMenu(context, habit);
+                },
+                child: Icon(Icons.more_vert),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          
+
           // Dynamic Progress Bar with Rounded Corners
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -70,14 +72,14 @@ class GoalItem extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           // Subtitle for progress details
           Text(
             statusText,
             style: const TextStyle(color: Colors.grey, fontSize: 13),
           ),
           const SizedBox(height: 4),
-          
+
           // Habit Type (e.g., Everyday) in orange
           Text(
             habit.habitType,
@@ -93,53 +95,58 @@ class GoalItem extends StatelessWidget {
   }
 
   // -----Action menu for  three dot icons for our Buttons
- void _showActionMenu(BuildContext context,HabitModel habit){
-  showModalBottomSheet(
-    context:context,
-    shape: BeveledRectangleBorder(borderRadius:BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (context) {
-      return Container(
-      padding:const  EdgeInsets.all(20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          //---------------------EDIT-------------
-          ListTile(
-            leading: const Icon(Icons.edit,color: AppColors.accentText),
-            title: const Text('Edit'),
-            onTap: (){
-
-              /// EDIT FUNCTION
-            },
-            ),
-          const Divider(),
-
-          //------------Delete----------------
-          ListTile(
-           leading: const Icon(Icons.delete,color: AppColors.accentText),
-           title: const Text("Delete"),
-           onTap: () {
-               showDeleteConfirmation(context, habit);
-           },
-          ),
-        ],
+  void _showActionMenu(BuildContext context, HabitModel habit) {
+    showModalBottomSheet(
+      context: context,
+      shape: BeveledRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      );
-    },
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              //---------------------EDIT-------------
+              ListTile(
+                leading: const Icon(Icons.edit, color: AppColors.accentText),
+                title: const Text('Edit'),
+                onTap: () {
+                  /// EDIT FUNCTION
+
+                  showDialog(
+                    context: context,
+                    builder: (context) => HabitEditDialog(habit: habit),
+                  );
+                },
+              ),
+              const Divider(),
+
+              //------------Delete----------------
+              ListTile(
+                leading: const Icon(Icons.delete, color: AppColors.accentText),
+                title: const Text("Delete"),
+                onTap: () {
+                  showDeleteConfirmation(context, habit);
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
-  void showDeleteConfirmation(BuildContext context,HabitModel habit){
-    final provider=Provider.of<HabitProvider>(context,listen:false);
+
+  void showDeleteConfirmation(BuildContext context, HabitModel habit) {
+    final provider = Provider.of<HabitProvider>(context, listen: false);
     showDialog(
       context: context,
-     builder:(context)=>GoalDeleteActionDialog(
-      goalTitle:habit.goalTitle,
-     onDeleteConfirmed: (){
-      provider.deleteHabit(habit);
-     },
+      builder: (context) => GoalDeleteActionDialog(
+        goalTitle: habit.goalTitle,
+        onDeleteConfirmed: () {
+          provider.deleteHabit(habit);
+        },
       ),
-     );
-
+    );
   }
 }

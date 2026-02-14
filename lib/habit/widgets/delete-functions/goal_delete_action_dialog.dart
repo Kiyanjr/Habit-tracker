@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/habit/screens/habits_screen.dart';
 import 'package:habit_tracker/theme/colors.dart';
 
-class DeleteActionDialog extends StatefulWidget {
-  const DeleteActionDialog({
+class GoalDeleteActionDialog extends StatefulWidget {
+  const GoalDeleteActionDialog({
     super.key,
-    required this.habitTitle,
+    required this.goalTitle,
     required this.onDeleteConfirmed,
   });
-  final String habitTitle;
+  final String goalTitle;
   final VoidCallback onDeleteConfirmed;
   @override
-  State<DeleteActionDialog> createState() {
+  State<GoalDeleteActionDialog> createState() {
     return _DeleteActionDialog();
   }
 }
 
-class _DeleteActionDialog extends State<DeleteActionDialog> {
+class _DeleteActionDialog extends State<GoalDeleteActionDialog> {
   bool isDeleted = false;
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,8 @@ class _DeleteActionDialog extends State<DeleteActionDialog> {
           const SizedBox(height: 8),
           Text(
             isDeleted
-                ? "The habit '${widget.habitTitle}' has been removed."
-                : "Do you really want to delete '${widget.habitTitle}'?",
+                ? "The habit '${widget.goalTitle}' has been removed."
+                : "Do you really want to delete '${widget.goalTitle}'?",
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -72,6 +72,18 @@ class _DeleteActionDialog extends State<DeleteActionDialog> {
                 isDeleted ? 'OK' : 'Yes Delete it',
                 style: const TextStyle(color: Colors.white),
               ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          //-------------CANCEL--------
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(context);
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.black),
+              textAlign: TextAlign.end,
             ),
           ),
         ],

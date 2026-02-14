@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/habit/screens/habits_screen.dart';
 import 'package:habit_tracker/theme/colors.dart';
 
-class GoalDeleteActionDialog extends StatefulWidget {
-  const GoalDeleteActionDialog({
+class DeleteActionDialog extends StatefulWidget {
+  const DeleteActionDialog({
     super.key,
-    required this.goalTitle,
+    required this.habitTitle,
     required this.onDeleteConfirmed,
   });
-  final String goalTitle;
+  final String habitTitle;
   final VoidCallback onDeleteConfirmed;
   @override
-  State<GoalDeleteActionDialog> createState() {
+  State<DeleteActionDialog> createState() {
     return _DeleteActionDialog();
   }
 }
 
-class _DeleteActionDialog extends State<GoalDeleteActionDialog> {
+class _DeleteActionDialog extends State<DeleteActionDialog> {
   bool isDeleted = false;
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,8 @@ class _DeleteActionDialog extends State<GoalDeleteActionDialog> {
           const SizedBox(height: 8),
           Text(
             isDeleted
-                ? "The habit '${widget.goalTitle}' has been removed."
-                : "Do you really want to delete '${widget.goalTitle}'?",
+                ? "The habit '${widget.habitTitle}' has been removed."
+                : "Do you really want to delete '${widget.habitTitle}'?",
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -73,6 +73,14 @@ class _DeleteActionDialog extends State<GoalDeleteActionDialog> {
                 style: const TextStyle(color: Colors.white),
               ),
             ),
+          ),
+          const SizedBox(height: 6),
+
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(context);
+            },    
+            child:Text('Cancel',style: TextStyle(color: Colors.black),textAlign: TextAlign.end),
           ),
         ],
       ),
