@@ -3,6 +3,7 @@ import 'package:habit_tracker/features/auth/providers/auth_provider.dart';
 import 'package:habit_tracker/habit/provider/habit_provider.dart';
 import 'package:habit_tracker/habit/screens/add_habit_screen.dart';
 import 'package:habit_tracker/habit/models/date.model.dart';
+import 'package:habit_tracker/habit/screens/bottom_nav_wrapper.dart';
 import 'package:habit_tracker/habit/widgets/progress_card.dart';
 import 'package:habit_tracker/habit/widgets/todays_habit_section.dart';
 import 'package:habit_tracker/habit/widgets/your_goals_section.dart';
@@ -86,6 +87,7 @@ class _HabitsScreen extends State<HabitsScreen> {
             YourGoalsSection(),
             const SizedBox(height: 100), // Extra space for FAB and BottomBar
           ],
+        
         ),
       ),
       // Position the FAB in the center of the BottomAppBar

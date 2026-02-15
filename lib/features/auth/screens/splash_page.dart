@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/features/auth/screens/login_screen.dart';
 import 'package:habit_tracker/features/auth/providers/auth_provider.dart';
-import 'package:habit_tracker/habit/screens/habits_screen.dart';
+import 'package:habit_tracker/habit/screens/bottom_nav_wrapper.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -74,7 +74,7 @@ class _SplashScreen extends State<SplashScreen>
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const HabitsScreen(),
+              builder: (context) => const BottomNavWrapper(),
             ),
           );
         } else {
