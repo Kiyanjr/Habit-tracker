@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/features/auth/screens/login_screen.dart';
 import 'package:habit_tracker/features/auth/providers/auth_provider.dart';
+import 'package:habit_tracker/features/auth/screens/login_screen.dart';
 import 'package:habit_tracker/features/auth/services/auth_service.dart';
 import 'package:habit_tracker/theme/colors.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +25,7 @@ class _SignUpScreen extends State<SignUpScreen> {
   void _navigateToLogIn(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
   }
 
@@ -40,7 +40,9 @@ class _SignUpScreen extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // English comment: Access UserProvider to save info after successful sign up
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -49,7 +51,7 @@ class _SignUpScreen extends State<SignUpScreen> {
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            Text(
+            const Text(
               'Sign Up',
               style: TextStyle(
                 fontSize: 26,
@@ -58,13 +60,16 @@ class _SignUpScreen extends State<SignUpScreen> {
               ),
             ),
             Expanded(
-              child: Text(
-                'Log In',
-                textAlign:TextAlign.right,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+              child: GestureDetector(
+                onTap: () => _navigateToLogIn(context),
+                child: const Text(
+                  'Log In',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
             ),
@@ -85,7 +90,6 @@ class _SignUpScreen extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
-              //Name field
               const Text(
                 'Name',
                 style: TextStyle(
@@ -95,7 +99,6 @@ class _SignUpScreen extends State<SignUpScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              //nameBox
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -104,15 +107,13 @@ class _SignUpScreen extends State<SignUpScreen> {
                 ),
                 child: TextField(
                   controller: _nameParamater,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 16),
                     border: InputBorder.none,
                   ),
                 ),
               ),
               const SizedBox(height: 10),
-
-              //Email box
               const Text(
                 'Email',
                 style: TextStyle(
@@ -129,16 +130,13 @@ class _SignUpScreen extends State<SignUpScreen> {
                 ),
                 child: TextField(
                   controller: _emailParamater,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 16),
                     border: InputBorder.none,
                   ),
                 ),
               ),
-
-              SizedBox(height: 10),
-
-              //Password input
+              const SizedBox(height: 10),
               const Text(
                 'Password',
                 style: TextStyle(
@@ -155,15 +153,13 @@ class _SignUpScreen extends State<SignUpScreen> {
                 child: TextField(
                   obscureText: true,
                   controller: _passwordParamater,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 16),
                     border: InputBorder.none,
                   ),
                 ),
               ),
-              SizedBox(height: 10),
-
-              //Reapeat Password input
+              const SizedBox(height: 10),
               const Text(
                 'Repeat_Password',
                 style: TextStyle(
@@ -180,16 +176,13 @@ class _SignUpScreen extends State<SignUpScreen> {
                 child: TextField(
                   obscureText: true,
                   controller: _reapeatPasswordParamater,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 16),
                     border: InputBorder.none,
                   ),
                 ),
               ),
-
-              //Sign up button
               const SizedBox(height: 35),
-
               GestureDetector(
                 onTap: () async {
                   final name = _nameParamater.text.trim();
@@ -199,7 +192,7 @@ class _SignUpScreen extends State<SignUpScreen> {
 
                   if (pass != repeatPass) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Passwords do not match')),
+                      const SnackBar(content: Text('Passwords do not match')),
                     );
                     return;
                   }
@@ -208,7 +201,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     context: context,
                     barrierDismissible: false,
                     builder: (context) =>
-                        Center(child: CircularProgressIndicator()),
+                        const Center(child: CircularProgressIndicator()),
                   );
 
                   final result = await _authService.singUp(
@@ -218,27 +211,28 @@ class _SignUpScreen extends State<SignUpScreen> {
                     repeatPass,
                   );
 
+                  if (!mounted) return;
                   Navigator.pop(context); // close loading
 
                   if (result == null) {
-                    // without any error we replace it
-                    userProvider.setUserNameAndEmail(name: name, email: email);
-                    // SUCCESS
+                    // English comment: Update UserProvider ONLY after a successful Sign Up
+                    await userProvider.setUserNameAndEmail(name: name, email: email);
+                    
+                    if (!mounted) return;
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
                     );
                   } else {
-                    // ERROR
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(result)));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(result)),
+                    );
                   }
                 },
                 child: Container(
                   height: 54,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
                         AppColors.primaryGradientStart,

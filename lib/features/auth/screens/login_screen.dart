@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/features/auth/providers/auth_provider.dart';
+
 import 'package:habit_tracker/features/auth/screens/sign_up_screen.dart';
-import 'package:habit_tracker/habit/screens/home_screen/habits_screen.dart';
+import 'package:habit_tracker/habit/screens/bottom_nav_wrapper.dart'; // English comment: Usually better than directly going to HabitsScreen
 import 'package:habit_tracker/theme/colors.dart';
 import 'package:habit_tracker/features/auth/services/auth_service.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
   @override
-  State<LoginScreen> createState() {
-    return _LoginScreen();
-  }
+  State<LoginScreen> createState() => _LoginScreen();
 }
 
 class _LoginScreen extends State<LoginScreen> {
   final TextEditingController _emailInput = TextEditingController();
   final TextEditingController _passwordInput = TextEditingController();
   final TextEditingController _nameInput = TextEditingController();
-  //auth
+  
   final AuthService _authService = AuthService();
 
   @override
@@ -33,20 +31,22 @@ class _LoginScreen extends State<LoginScreen> {
   void _navigateToSignUp(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SignUpScreen()),
+      MaterialPageRoute(builder: (context) => const SignUpScreen()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // English comment: Use UserProvider to manage the state
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: AppColors.background,
         automaticallyImplyLeading: false,
-        title: Text(
+        title: const Text(
           'Log In',
           style: TextStyle(
             fontSize: 26,
@@ -62,166 +62,70 @@ class _LoginScreen extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
-              // Email TextFiled
-              const Text(
-                'Email',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              _buildLabel('Email'),
               const SizedBox(height: 8),
-              //box
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.black12, width: 1),
-                ),
-                child: TextField(
-                  controller: _emailInput,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                    ), //<---user input till the border of box
-                    hintText: '.....@gmail.com',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
+              _buildTextField(_emailInput, '.....@gmail.com'),
+              const SizedBox(height: 15),
+              _buildLabel('Password'),
               const SizedBox(height: 8),
-              //Password TextField
-              const Text(
-                'Password',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              _buildTextField(_passwordInput, '', isObscure: true),
+              const SizedBox(height: 15),
+              _buildLabel('Name'),
               const SizedBox(height: 8),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.black12, width: 1),
-                ),
-                child: TextField(
-                  obscureText: true, //<--hiding the user input
-                  controller: _passwordInput,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                    ), //<---user input till the border of box
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              //name
-              const Text(
-                'Name',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.black12, width: 1),
-                ),
-                child: TextField(
-                  obscureText: false, //<--hiding the user input
-                  controller: _nameInput,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                    ), //<---user input till the border of box
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
+              _buildTextField(_nameInput, 'Your Name'),
 
               const SizedBox(height: 35),
-              // login buttom
+              
+              // --- Login Button ---
               GestureDetector(
                 onTap: () async {
                   final email = _emailInput.text.trim();
                   final password = _passwordInput.text.trim();
                   final name = _nameInput.text.trim();
+
+                  if (email.isEmpty || password.isEmpty || name.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please fill all fields')),
+                    );
+                    return;
+                  }
+
                   showDialog(
                     context: context,
                     barrierDismissible: false,
-                    builder: (context) =>
-                        Center(child: CircularProgressIndicator()),
+                    builder: (context) => const Center(child: CircularProgressIndicator()),
                   );
-                  final result = await _authService.logIn(
-                    email,
-                    name,
-                    password,
-                  );
-                  Navigator.pop(context);
-                  // close loading
+
+                  final result = await _authService.logIn(email, name, password);
+
+                  if (!mounted) return;
+                  Navigator.pop(context); // Close loading dialog
+
                   if (result == null) {
-                    //  saving user inputs
-                    final prefs=await SharedPreferences.getInstance();
-                    await prefs.setBool('isLoggedIn', true);
-                    await prefs.setString('userName', name);
-                    await prefs.setString('userEmail', email);
-                    //upadting provider
-                    userProvider.setUserNameAndEmail(name: name, email: email);
+                    // English comment: Update the provider (it handles SharedPreferences internally)
+                    await userProvider.setUserNameAndEmail(name: name, email: email);
+
+                    if (!mounted) return;
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HabitsScreen()),
+                      MaterialPageRoute(builder: (context) => const BottomNavWrapper()),
                     );
                   } else {
-                    // ERROR
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(result)));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
                   }
                 },
-                child: Container(
-                  height: 56,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.primaryGradientStart,
-                        AppColors.primaryGradientEnd,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: const Text(
-                    'Log In',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.background,
-                    ),
-                  ),
-                ),
+                child: _buildLoginButton(),
               ),
 
               const SizedBox(height: 40),
-              // sing up
+              
               TextButton(
-                onPressed: () {
-                  _navigateToSignUp(context);
-                },
-                child: Text(
-                  'Dont have an accont?? click here.',
+                onPressed: () => _navigateToSignUp(context),
+                child: const Text(
+                  'Don\'t have an account? Click here.',
                   style: TextStyle(
                     color: AppColors.accentText,
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -229,6 +133,56 @@ class _LoginScreen extends State<LoginScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // --- Helper Widgets to keep code clean ---
+  Widget _buildLabel(String label) {
+    return Text(
+      label,
+      style: const TextStyle(
+        color: AppColors.textPrimary,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String hint, {bool isObscure = false}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.black12, width: 1),
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: isObscure,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+          hintText: hint,
+          border: InputBorder.none,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginButton() {
+    return Container(
+      height: 56,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: const LinearGradient(
+          colors: [AppColors.primaryGradientStart, AppColors.primaryGradientEnd],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: const Text(
+        'Log In',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.background),
       ),
     );
   }
