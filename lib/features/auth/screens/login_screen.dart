@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/features/auth/providers/auth_provider.dart';
 import 'package:habit_tracker/features/auth/screens/sign_up_screen.dart';
-import 'package:habit_tracker/habit/screens/habits_screen.dart';
+import 'package:habit_tracker/habit/screens/home_screen/habits_screen.dart';
 import 'package:habit_tracker/theme/colors.dart';
 import 'package:habit_tracker/features/auth/services/auth_service.dart';
 import 'package:provider/provider.dart';

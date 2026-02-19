@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/features/auth/providers/auth_provider.dart';
 import 'package:habit_tracker/habit/provider/habit_provider.dart';
-import 'package:habit_tracker/habit/screens/add_habit_screen.dart';
+import 'package:habit_tracker/habit/screens/add_screen/add_habit_screen.dart';
 import 'package:habit_tracker/habit/models/date.model.dart';
 import 'package:habit_tracker/habit/screens/bottom_nav_wrapper.dart';
 import 'package:habit_tracker/habit/widgets/progress_card.dart';
@@ -75,7 +75,7 @@ class _HabitsScreen extends State<HabitsScreen> {
             const SizedBox(height: 15),
             // Display progress overview card
             ProgressCard(
-              completedHabits:habitProvider.completedHabits,
+              completedHabits:habitProvider.completedToday,
               totalHabits:habitProvider.totalHabits,
               progressPercentage:(habitProvider.progressPercentage * 100).toInt(),
             ),

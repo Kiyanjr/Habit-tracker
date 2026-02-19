@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/habit/screens/habits_screen.dart';
 import 'package:habit_tracker/theme/colors.dart';
 
 class DeleteActionDialog extends StatefulWidget {
@@ -55,10 +54,7 @@ class _DeleteActionDialog extends State<DeleteActionDialog> {
                     isDeleted = true;
                   });
                 } else if (isDeleted) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HabitsScreen()),
-                  );
+                 Navigator.pop(context);
                 }
               },
               style: ElevatedButton.styleFrom(

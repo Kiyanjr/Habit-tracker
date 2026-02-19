@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/habit/models/habit_model.dart';
 import 'package:habit_tracker/habit/provider/habit_provider.dart';
-import 'package:habit_tracker/habit/screens/done_screen.dart';
+import 'package:habit_tracker/habit/screens/add_screen/done_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 

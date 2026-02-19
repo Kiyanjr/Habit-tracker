@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/habit/screens/habits_screen.dart';
-import 'package:habit_tracker/habit/screens/progress_screen.dart';
-import 'package:habit_tracker/habit/screens/settings_screen.dart';
-import 'package:habit_tracker/theme/colors.dart';
+import 'package:habit_tracker/habit/screens/home_screen/habits_screen.dart';
+import 'package:habit_tracker/habit/screens/progress_screen/progress_screen.dart';
+import 'package:habit_tracker/habit/screens/setting_screen/settings_screen.dart';
+
   
 
-   ////----------------------THIS CLASS IS CALLED IN SPALSH_SCREEN.DART----------
+   //----------------------THIS CLASS IS CALLED IN SPALSH_SCREEN.DART----------
+   
 class BottomNavWrapper extends StatefulWidget {
   const BottomNavWrapper({super.key});
   @override

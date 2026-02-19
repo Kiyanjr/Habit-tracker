@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/habit/provider/habit_provider.dart';
-import 'package:habit_tracker/habit/screens/see_all_habits_screen.dart';
+import 'package:habit_tracker/habit/screens/home_screen/see_all_habits_screen.dart';
 import 'package:habit_tracker/habit/widgets/habit_items.dart';
 import 'package:habit_tracker/theme/colors.dart';
 import 'package:provider/provider.dart';

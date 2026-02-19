@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ProgressCard extends StatelessWidget {
   const ProgressCard({
@@ -33,30 +34,33 @@ class ProgressCard extends StatelessWidget {
             children: [
               SizedBox(
                 // Increased height and width from 80 to 100 for a bigger shape
-                height:100,
+                height: 100,
                 width: 100,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    // The progress ring
-                    CircularProgressIndicator(
-                      value: progressPercentage / 100,
+                    // Use CircularPercentIndicator for a more modern and professional look
+                    CircularPercentIndicator(
+                      radius: 30.0, // Adjust size to fit your Home Screen card
+                      lineWidth: 6.0, // Thickness of the progress line
+                    
+                      percent: progressPercentage / 100,
+
+                      // Smooth animation when the value changes
+                      animation: true,
+                      animateFromLastPercent: true,
+                      circularStrokeCap: CircularStrokeCap.round,
+
+                      // Colors styling
+                      progressColor: Colors.white,
                       backgroundColor: Colors.white.withOpacity(0.3),
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        Colors.white,
-                      ),
-                      // Increased strokeWidth to 8 to match the larger scale
-                      strokeWidth:5,
-                    ),
-                    // Percentage text with more "breathing room" inside
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Text(
-                        '${progressPercentage.toInt()}%',
+
+                      // Center widget to display the numeric percentage
+                      center: Text(
+                        "${progressPercentage.toInt()}%",
                         style: const TextStyle(
                           color: Colors.white,
-                          // Increased font size slightly to match the bigger circle
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

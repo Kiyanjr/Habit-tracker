@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/habit/screens/habits_screen.dart';
+import 'package:habit_tracker/habit/screens/home_screen/habits_screen.dart';
 import 'package:habit_tracker/theme/colors.dart';
 
 class DoneScreen extends StatelessWidget {
@@ -42,10 +42,7 @@ class DoneScreen extends StatelessWidget {
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HabitsScreen()),
-                    );
+                    Navigator.of(context).pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:AppColors.primaryGradientEnd,
