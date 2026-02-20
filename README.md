@@ -67,11 +67,11 @@ This project helped me practice:
 
 ### App Preview
 
-<img src="assets/screenshots/1.png" width="250"/>
-<img src="assets/screenshots/2.png" width="250"/>
-<img src="assets/screenshots/3.png" width="250"/>
-<img src="assets/screenshots/4.png" width="250"/>
-<img src="assets/screenshots/5.png" width="250"/>
+<img src="assets/logo/screenshots/1.png" width="250"/>
+<img src="assets/logo/screenshots/2.png" width="250"/>
+<img src="assets/logo/screenshots/3.png" width="250"/>
+<img src="assets/logo/screenshots/4.png" width="250"/>
+<img src="assets/logo/screenshots/5.png" width="250"/>
 
 
 
