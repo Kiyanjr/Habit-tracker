@@ -61,9 +61,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAHo8AfUvLcV4bPUI2v3TBiWMk4mZ_qaiM',
-    appId: '1:126538049668:android:d3ef4eea61633141277ad1',
+    appId: '1:126538049668:android:5234a7023f441051277ad1',
     messagingSenderId: '126538049668',
     projectId: 'habit-tracker-6149f',
     storageBucket: 'habit-tracker-6149f.firebasestorage.app',
   );
+
 }
